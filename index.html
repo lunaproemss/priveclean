@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privé Clean — Премиальный клининг в Сочи</title>
+<meta name="description" content="Профессиональный клининг в Сочи. Уборка квартир, офисов, после ремонта, химчистка мебели. Звоните!">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#0C0C0C;color:#E8E0D0;line-height:1.6}
+
+:root{
+  --gold:#C9A84C;
+  --gold-light:#E8C96A;
+  --gold-dim:#8A6E2E;
+  --green:#1B4332;
+  --green-light:#2D6A4F;
+  --cream:#E8E0D0;
+  --cream-dim:#A09080;
+  --dark:#0C0C0C;
+  --dark2:#141414;
+  --dark3:#1C1C1C;
+  --dark4:#242424;
+}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(12,12,12,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,0.15)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gold);letter-spacing:0.08em}
+.nav-logo span{font-weight:400;color:var(--cream-dim)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-size:13px;color:var(--cream-dim);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Inter',sans-serif;font-size:13px;padding:10px 24px;cursor:pointer;letter-spacing:0.06em;transition:all 0.25s}
+.nav-cta:hover{background:var(--gold);color:var(--dark)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 40px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 70% 50%, rgba(27,67,50,0.25) 0%, transparent 70%);pointer-events:none}
+.hero-line{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%}
+.hero-tag{display:inline-flex;align-items:center;gap:10px;margin-bottom:32px}
+.hero-tag-dot{width:6px;height:6px;background:var(--gold);border-radius:50%}
+.hero-tag-txt{font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold)}
+h1.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,7vw,96px);font-weight:600;line-height:0.95;color:var(--cream);margin-bottom:12px}
+h1.hero-title em{font-style:italic;color:var(--gold)}
+.hero-city{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,7vw,96px);font-weight:300;line-height:0.95;color:var(--cream-dim);margin-bottom:40px}
+.hero-desc{font-size:16px;color:var(--cream-dim);max-width:480px;margin-bottom:48px;line-height:1.7}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+.btn-primary{background:var(--gold);color:var(--dark);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:16px 36px;border:none;cursor:pointer;letter-spacing:0.06em;text-decoration:none;display:inline-block;transition:all 0.25s}
+.btn-primary:hover{background:var(--gold-light)}
+.btn-secondary{background:transparent;color:var(--cream);font-family:'Inter',sans-serif;font-size:14px;padding:16px 36px;border:1px solid rgba(232,224,208,0.3);cursor:pointer;letter-spacing:0.06em;text-decoration:none;display:inline-block;transition:all 0.25s}
+.btn-secondary:hover{border-color:var(--cream);background:rgba(232,224,208,0.05)}
+.hero-stats{display:flex;gap:48px;margin-top:80px;padding-top:48px;border-top:1px solid rgba(201,168,76,0.2)}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:600;color:var(--gold);line-height:1}
+.stat-label{font-size:12px;color:var(--cream-dim);letter-spacing:0.06em;margin-top:6px}
+
+/* SECTION BASE */
+section{padding:100px 40px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-tag{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,52px);font-weight:600;color:var(--cream);line-height:1.1;margin-bottom:16px}
+.section-title em{color:var(--gold);font-style:italic}
+.section-sub{font-size:15px;color:var(--cream-dim);max-width:560px;line-height:1.7;margin-bottom:64px}
+.divider{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin-bottom:20px;width:60px}
+
+/* SERVICES */
+.services-bg{background:var(--dark2)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:rgba(201,168,76,0.1)}
+.service-card{background:var(--dark2);padding:40px 32px;transition:background 0.25s}
+.service-card:hover{background:var(--dark3)}
+.service-icon{width:48px;height:48px;border:1px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;margin-bottom:24px}
+.service-icon svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.service-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--cream);margin-bottom:12px}
+.service-desc{font-size:13px;color:var(--cream-dim);line-height:1.7}
+
+/* WHY */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.why-list{display:flex;flex-direction:column;gap:32px}
+.why-item{display:flex;gap:20px}
+.why-num{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:rgba(201,168,76,0.25);line-height:1;flex-shrink:0;width:48px}
+.why-text-title{font-size:15px;font-weight:500;color:var(--cream);margin-bottom:6px}
+.why-text-desc{font-size:13px;color:var(--cream-dim);line-height:1.7}
+.why-visual{background:var(--dark3);border:1px solid rgba(201,168,76,0.15);padding:48px;display:flex;flex-direction:column;gap:24px}
+.why-cert{border-left:2px solid var(--gold);padding-left:20px}
+.why-cert-title{font-size:13px;font-weight:500;color:var(--gold);margin-bottom:4px}
+.why-cert-desc{font-size:12px;color:var(--cream-dim)}
+
+/* HOW */
+.how-bg{background:var(--dark2)}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.how-steps::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),var(--gold-dim),transparent)}
+.how-step{padding:0 24px;padding-top:0;text-align:center}
+.how-step-dot{width:56px;height:56px;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;background:var(--dark2);position:relative;z-index:1}
+.how-step-dot-num{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold);font-weight:500}
+.how-step-title{font-size:14px;font-weight:500;color:var(--cream);margin-bottom:8px}
+.how-step-desc{font-size:12px;color:var(--cream-dim);line-height:1.6}
+
+/* REVIEWS */
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.review-card{background:var(--dark3);border:1px solid rgba(201,168,76,0.1);padding:32px}
+.review-stars{display:flex;gap:4px;margin-bottom:16px}
+.star{color:var(--gold);font-size:13px}
+.review-text{font-size:14px;color:var(--cream-dim);line-height:1.7;margin-bottom:20px;font-style:italic}
+.review-author{font-size:13px;font-weight:500;color:var(--cream)}
+.review-role{font-size:12px;color:var(--cream-dim)}
+
+/* CTA */
+.cta-section{background:var(--green);padding:100px 40px;text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(201,168,76,0.08),transparent)}
+.cta-inner{max-width:640px;margin:0 auto;position:relative}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,56px);font-weight:600;color:var(--cream);margin-bottom:16px;line-height:1.1}
+.cta-title em{color:var(--gold);font-style:italic}
+.cta-sub{font-size:15px;color:rgba(232,224,208,0.7);margin-bottom:40px}
+.cta-form{display:flex;gap:12px;max-width:440px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.cta-input{flex:1;min-width:200px;background:rgba(232,224,208,0.08);border:1px solid rgba(201,168,76,0.3);color:var(--cream);font-family:'Inter',sans-serif;font-size:14px;padding:15px 20px;outline:none}
+.cta-input::placeholder{color:rgba(232,224,208,0.4)}
+.cta-input:focus{border-color:var(--gold)}
+
+/* FOOTER */
+footer{background:var(--dark);border-top:1px solid rgba(201,168,76,0.15);padding:60px 40px 40px}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--gold);margin-bottom:12px}
+.footer-desc{font-size:13px;color:var(--cream-dim);line-height:1.7}
+.footer-col-title{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-links a{font-size:13px;color:var(--cream-dim);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{max-width:1100px;margin:48px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--cream-dim)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:16px 24px}
+  .nav-links{display:none}
+  section{padding:72px 24px}
+  .hero{padding:100px 24px 64px}
+  .why-grid{grid-template-columns:1fr}
+  .why-visual{display:none}
+  .how-steps{grid-template-columns:1fr 1fr;gap:40px}
+  .how-steps::before{display:none}
+  .reviews-grid{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:8px;text-align:center}
+  .hero-stats{gap:28px;flex-wrap:wrap}
+  .cta-section{padding:72px 24px}
+}
+@media(max-width:600px){
+  .services-grid{grid-template-columns:1fr}
+  .how-steps{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column}
+  .btn-primary,.btn-secondary{text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Privé<span> Clean</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Услуги</a></li>
+    <li><a href="#why">О нас</a></li>
+    <li><a href="#how">Как работаем</a></li>
+    <li><a href="#reviews">Отзывы</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Оставить заявку</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-inner">
+    <div class="hero-tag"><div class="hero-tag-dot"></div><span class="hero-tag-txt">Премиальный клининг</span></div>
+    <h1 class="hero-title">Чистота,<br>которую <em>чувствуют</em></h1>
+    <p class="hero-city">Сочи</p>
+    <p class="hero-desc">Профессиональный клининг для тех, кто ценит совершенство. Квартиры, офисы, дома после ремонта, химчистка мебели.</p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary">Рассчитать стоимость</a>
+      <a href="tel:+79000000000" class="btn-secondary">Позвонить</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">500+</div><div class="stat-label">Довольных клиентов</div></div>
+      <div><div class="stat-num">3</div><div class="stat-label">Года на рынке</div></div>
+      <div><div class="stat-num">100%</div><div class="stat-label">Гарантия качества</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-bg" id="services">
+  <div class="section-inner">
+    <div class="section-tag">Наши услуги</div>
+    <div class="divider"></div>
+    <h2 class="section-title">Весь спектр<br><em>клининга</em></h2>
+    <p class="section-sub">Каждая уборка — это проект, к которому мы подходим с вниманием к деталям и профессиональным оборудованием.</p>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="service-name">Уборка квартир</div>
+        <div class="service-desc">Регулярная и генеральная уборка. Все поверхности, сантехника, окна. Работаем бережно с вашим пространством.</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="service-name">Офисы и бизнес</div>
+        <div class="service-desc">Ежедневная поддержка чистоты или разовая уборка офисных помещений любого масштаба.</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <div class="service-name">После ремонта</div>
+        <div class="service-desc">Удаление строительной пыли, цемента, краски. Полная уборка после любого вида ремонтных работ.</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        </div>
+        <div class="service-name">Химчистка мебели</div>
+        <div class="service-desc">Глубокая чистка диванов, кресел, матрасов. Профессиональные средства, безопасные для детей и животных.</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="service-name">Поддерживающая уборка</div>
+        <div class="service-desc">Регулярное обслуживание по графику — еженедельно, раз в две недели. Стабильный результат каждый раз.</div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <div class="service-name">Коттеджи и виллы</div>
+        <div class="service-desc">Уборка загородных домов и вилл. Знаем специфику недвижимости Сочи и Черноморского побережья.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="section-inner">
+    <div class="why-grid">
+      <div>
+        <div class="section-tag">Почему мы</div>
+        <div class="divider"></div>
+        <h2 class="section-title">Стандарты<br><em>премиум-класса</em></h2>
+        <p class="section-sub">Мы не просто убираем — мы создаём среду, в которой приятно жить и работать.</p>
+        <div class="why-list">
+          <div class="why-item">
+            <div class="why-num">01</div>
+            <div>
+              <div class="why-text-title">Профессиональное оборудование</div>
+              <div class="why-text-desc">Используем только сертифицированную технику и средства европейских брендов. Безопасно для здоровья и экологии.</div>
+            </div>
+          </div>
+          <div class="why-item">
+            <div class="why-num">02</div>
+            <div>
+              <div class="why-text-title">Проверенный персонал</div>
+              <div class="why-text-desc">Каждый специалист проходит обучение и проверку. Работаем официально, вы застрахованы от любых рисков.</div>
+            </div>
+          </div>
+          <div class="why-item">
+            <div class="why-num">03</div>
+            <div>
+              <div class="why-text-title">Гарантия результата</div>
+              <div class="why-text-desc">Если что-то не устроит — переделаем бесплатно. Нам важно, чтобы вы были довольны на 100%.</div>
+            </div>
+          </div>
+          <div class="why-item">
+            <div class="why-num">04</div>
+            <div>
+              <div class="why-text-title">Точность и пунктуальность</div>
+              <div class="why-text-desc">Приезжаем строго в назначенное время. Ценим ваше время так же, как своё.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="why-visual">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:600;color:var(--gold);line-height:1">5★</div>
+        <div style="font-size:14px;color:var(--cream-dim);margin-bottom:32px">Средняя оценка клиентов</div>
+        <div class="why-cert">
+          <div class="why-cert-title">Сертифицированные средства</div>
+          <div class="why-cert-desc">Все химические средства имеют сертификаты безопасности и не оставляют резкого запаха</div>
+        </div>
+        <div style="height:1px;background:rgba(201,168,76,0.15);margin:24px 0"></div>
+        <div class="why-cert">
+          <div class="why-cert-title">Работаем официально</div>
+          <div class="why-cert-desc">ИП, договор, акт выполненных работ. Безналичная оплата</div>
+        </div>
+        <div style="height:1px;background:rgba(201,168,76,0.15);margin:24px 0"></div>
+        <div class="why-cert">
+          <div class="why-cert-title">Страхование ответственности</div>
+          <div class="why-cert-desc">Застрахованы от случайного причинения вреда имуществу</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="how-bg" id="how">
+  <div class="section-inner">
+    <div class="section-tag">Как мы работаем</div>
+    <div class="divider"></div>
+    <h2 class="section-title">Просто <em>и прозрачно</em></h2>
+    <p class="section-sub">Четыре шага от вашей заявки до сияющей чистоты.</p>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-step-dot"><div class="how-step-dot-num">1</div></div>
+        <div class="how-step-title">Заявка</div>
+        <div class="how-step-desc">Оставьте заявку онлайн или позвоните. Ответим в течение 15 минут.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-dot"><div class="how-step-dot-num">2</div></div>
+        <div class="how-step-title">Расчёт стоимости</div>
+        <div class="how-step-desc">Уточним площадь и задачи. Назовём точную цену без скрытых доплат.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-dot"><div class="how-step-dot-num">3</div></div>
+        <div class="how-step-title">Уборка</div>
+        <div class="how-step-desc">Приедем в удобное время. Работаем тщательно, не мешаем вашему ритму жизни.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-dot"><div class="how-step-dot-num">4</div></div>
+        <div class="how-step-title">Приёмка</div>
+        <div class="how-step-desc">Проверяете результат. Довольны — оплачиваете. Всё просто и честно.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-inner">
+    <div class="section-tag">Отзывы клиентов</div>
+    <div class="divider"></div>
+    <h2 class="section-title">Говорят <em>клиенты</em></h2>
+    <p class="section-sub">Нам важна каждая оценка — они помогают нам становиться лучше.</p>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">Заказывала генеральную уборку после ремонта. Строительная пыль везде — думала, никогда не уберём. Ребята справились за один день, квартира засияла. Очень довольна!</div>
+        <div class="review-author">Анна К.</div>
+        <div class="review-role">Уборка после ремонта</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">Пользуюсь поддерживающей уборкой каждые две недели. Всегда приходят вовремя, работают аккуратно. Уже год сотрудничаем — ни разу не разочаровалась.</div>
+        <div class="review-author">Марина В.</div>
+        <div class="review-role">Регулярная уборка</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">Химчистка дивана — результат превзошёл ожидания. Диван как новый! Запаха реагентов нет вообще. Буду рекомендовать всем знакомым.</div>
+        <div class="review-author">Дмитрий Р.</div>
+        <div class="review-role">Химчистка мебели</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-inner">
+    <div class="section-tag" style="justify-content:center;display:flex">Оставить заявку</div>
+    <h2 class="cta-title">Начните с<br><em>бесплатной</em> консультации</h2>
+    <p class="cta-sub">Оставьте номер телефона — перезвоним в течение 15 минут и рассчитаем стоимость.</p>
+    <div class="cta-form">
+      <input class="cta-input" type="tel" placeholder="+7 (___) ___-__-__">
+      <button class="btn-primary">Перезвоните мне</button>
+    </div>
+    <p style="font-size:12px;color:rgba(232,224,208,0.4);margin-top:16px">Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Privé Clean</div>
+      <p class="footer-desc">Премиальный клининг в Сочи. Чистота, которую вы заслуживаете.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Услуги</div>
+      <ul class="footer-links">
+        <li><a href="#services">Уборка квартир</a></li>
+        <li><a href="#services">Офисы</a></li>
+        <li><a href="#services">После ремонта</a></li>
+        <li><a href="#services">Химчистка мебели</a></li>
+        <li><a href="#services">Коттеджи и виллы</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Контакты</div>
+      <ul class="footer-links">
+        <li><a href="tel:+79000000000">+7 (995) 227-84-27</a></li>
+        <li><a href="mailto:info@priveclean.ru">prive_clean.sochi@mail.ru</a></li>
+        <li><a href="#">г. Сочи</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Telegram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Privé Clean. Все права защищены.</span>
+    <span>Сочи, Россия</span>
+  </div>
+</footer>
+
+</body>
+</html>
