@@ -14,6 +14,7 @@ body{font-family:'Inter',sans-serif;background:#0C0C0C;color:#E8E0D0;line-height
   --gold:#C9A84C;--gold-l:#E8C96A;--gold-d:#8A6E2E;
   --green:#1B4332;--cream:#E8E0D0;--cream-d:#A09080;
   --dark:#0C0C0C;--d2:#141414;--d3:#1C1C1C;
+  --err:#C96A6A;
 }
 [data-reveal]{opacity:0;transform:translateY(32px);transition:opacity 0.75s cubic-bezier(.22,1,.36,1),transform 0.75s cubic-bezier(.22,1,.36,1)}
 [data-reveal].on{opacity:1;transform:none}
@@ -240,6 +241,7 @@ nav.sc{background:rgba(12,12,12,0.96);backdrop-filter:blur(20px);border-bottom:1
 }
 .cta-inp::placeholder{color:rgba(232,224,208,.28)}
 .cta-inp:focus{border-color:rgba(201,168,76,.65)}
+.cta-inp.err{border-color:rgba(201,106,106,.75)}
 .cta-sbm{
   background:rgba(201,168,76,0.92);
   color:var(--dark);
@@ -250,9 +252,18 @@ nav.sc{background:rgba(12,12,12,0.96);backdrop-filter:blur(20px);border-bottom:1
   backdrop-filter:blur(8px);
   box-shadow:0 2px 16px rgba(201,168,76,0.2),inset 0 1px 0 rgba(255,255,255,0.15);
   transition:all .3s;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:8px;justify-content:center;
 }
 .cta-sbm:hover{background:var(--gold-l);box-shadow:0 8px 24px rgba(201,168,76,0.35)}
+.cta-sbm:disabled{opacity:.55;cursor:default;transform:none;box-shadow:0 2px 16px rgba(201,168,76,0.2),inset 0 1px 0 rgba(255,255,255,0.15)}
+.cta-spin{width:12px;height:12px;border-radius:50%;border:2px solid rgba(12,12,12,.25);border-top-color:var(--dark);animation:spin .7s linear infinite;display:none}
+.cta-sbm.loading .cta-spin{display:inline-block}
+.cta-sbm.loading .cta-txt{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
 .cta-note{font-size:11px;color:rgba(232,224,208,.28);margin-top:12px}
+.cta-status{font-size:12px;margin-top:16px;min-height:16px;transition:color .3s}
+.cta-status.ok{color:var(--gold-l)}
+.cta-status.bad{color:var(--err)}
 
 /* FOOTER */
 footer{background:var(--dark);border-top:1px solid rgba(201,168,76,.1);padding:70px 48px 36px}
@@ -479,10 +490,13 @@ footer{background:var(--dark);border-top:1px solid rgba(201,168,76,.1);padding:7
     <div class="eye" style="justify-content:center" data-reveal>Оставить заявку</div>
     <h2 class="cta-h" data-reveal data-d="1">Начните с<br><em>бесплатной</em> консультации</h2>
     <p class="cta-sub" data-reveal data-d="2">Оставьте номер телефона — перезвоним в течение 15 минут и рассчитаем стоимость.</p>
-    <div class="cta-form" data-reveal data-d="3">
-      <input class="cta-inp" type="tel" placeholder="+7 (___) ___-__-__">
-      <button class="cta-sbm">Перезвоните мне</button>
-    </div>
+    <form class="cta-form" id="leadForm" data-reveal data-d="3" novalidate>
+      <input class="cta-inp" id="leadPhone" name="phone" type="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel" required>
+      <button class="cta-sbm" id="leadSubmit" type="submit">
+        <span class="cta-spin"></span><span class="cta-txt">Перезвоните мне</span>
+      </button>
+    </form>
+    <p class="cta-status" id="leadStatus" role="status" aria-live="polite"></p>
     <p class="cta-note" data-reveal data-d="4">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных</p>
   </div>
 </section>
@@ -545,6 +559,108 @@ if(window.matchMedia('(hover:hover)').matches){
   document.body.appendChild(g);
   document.addEventListener('mousemove',function(e){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';},{passive:true});
 }
+
+/* ============================================================
+   ФОРМА ЗАЯВКИ — Telegram + резервная копия на почту
+   ============================================================
+   1) TELEGRAM_BOT_TOKEN — токен, который выдаёт @BotFather.
+      Формат примерно такой: 123456789:AAExxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   2) TELEGRAM_CHAT_ID — chat_id клиента. Узнаётся после того как
+      клиент один раз нажмёт /start вашему боту в Telegram —
+      тогда его chat_id появится по адресу:
+      https://api.telegram.org/bot<ТОКЕН>/getUpdates
+   3) BACKUP_EMAIL — почта для дублирования заявки (уже вписана,
+      можно поменять при необходимости). Письма идут через
+      formsubmit.co — бесплатный сервис без бэкенда, но перед
+      первым письмом formsubmit.co попросит подтвердить адрес
+      (придёт одно письмо с кнопкой подтверждения — нажать один раз).
+   ============================================================ */
+var TELEGRAM_BOT_TOKEN = '8752940652:AAG4Ci9GJJJ7aEb89nc6nYG2Vo5KVizTsIw';
+var TELEGRAM_CHAT_ID   = '6337391749';
+var BACKUP_EMAIL       = 'prive_clean.sochi@mail.ru';
+
+(function(){
+  var form   = document.getElementById('leadForm');
+  var input  = document.getElementById('leadPhone');
+  var btn    = document.getElementById('leadSubmit');
+  var status = document.getElementById('leadStatus');
+
+  function setStatus(text, kind){
+    status.textContent = text;
+    status.classList.remove('ok','bad');
+    if(kind) status.classList.add(kind);
+  }
+
+  function isValidPhone(v){
+    var digits = v.replace(/\D/g,'');
+    return digits.length >= 10;
+  }
+
+  function sendToTelegram(phone){
+    if(!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.indexOf('ВСТАВЬ') !== -1) {
+      return Promise.reject(new Error('bot token not set'));
+    }
+    var text = 'Новая заявка с сайта priveclean.ru%0A' +
+               'Телефон: ' + encodeURIComponent(phone) + '%0A' +
+               'Страница: ' + encodeURIComponent(location.href);
+    var url = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN +
+              '/sendMessage?chat_id=' + encodeURIComponent(TELEGRAM_CHAT_ID) +
+              '&text=' + text;
+    return fetch(url).then(function(r){
+      if(!r.ok) throw new Error('telegram send failed');
+      return r.json();
+    });
+  }
+
+  function sendToEmail(phone){
+    if(!BACKUP_EMAIL) return Promise.reject(new Error('no email configured'));
+    return fetch('https://formsubmit.co/ajax/' + encodeURIComponent(BACKUP_EMAIL), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: 'Новая заявка с сайта Privé Clean',
+        phone: phone,
+        page: location.href
+      })
+    }).then(function(r){
+      if(!r.ok) throw new Error('email send failed');
+      return r.json();
+    });
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var phone = input.value.trim();
+
+    if(!isValidPhone(phone)){
+      input.classList.add('err');
+      setStatus('Проверьте номер телефона', 'bad');
+      input.focus();
+      return;
+    }
+    input.classList.remove('err');
+
+    btn.disabled = true;
+    btn.classList.add('loading');
+    setStatus('Отправляем заявку…');
+
+    Promise.allSettled([ sendToTelegram(phone), sendToEmail(phone) ]).then(function(results){
+      var ok = results.some(function(r){ return r.status === 'fulfilled'; });
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      if(ok){
+        setStatus('Заявка отправлена! Перезвоним в течение 15 минут.', 'ok');
+        form.reset();
+      } else {
+        setStatus('Не получилось отправить онлайн — позвоните нам: +7 (995) 227-84-27', 'bad');
+      }
+    });
+  });
+
+  input.addEventListener('input', function(){
+    input.classList.remove('err');
+  });
+})();
 </script>
 </body>
 </html>
