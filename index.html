@@ -226,33 +226,41 @@ nav.sc{background:rgba(12,12,12,0.96);backdrop-filter:blur(20px);border-bottom:1
 .cta-h{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,58px);font-weight:600;color:var(--cream);margin-bottom:14px;line-height:1.05}
 .cta-h em{color:var(--gold);font-style:italic}
 .cta-sub{font-size:14px;color:rgba(232,224,208,.65);margin-bottom:40px;line-height:1.8}
-.cta-form{display:flex;gap:0;max-width:400px;margin:0 auto}
-.cta-inp{
-  flex:1;
+.cta-form{display:flex;flex-direction:column;gap:12px;max-width:400px;margin:0 auto}
+.cta-inp,.cta-sel{
+  width:100%;
   background:rgba(232,224,208,0.07);
   border:1px solid rgba(201,168,76,.28);
-  border-right:none;
   color:var(--cream);
   font-family:'Inter',sans-serif;font-size:14px;
   padding:15px 20px;outline:none;
-  border-radius:100px 0 0 100px;
+  border-radius:100px;
   backdrop-filter:blur(8px);
   transition:border-color .3s;
+  appearance:none;-webkit-appearance:none;
 }
+.cta-sel{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='%23C9A84C' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='2 5 7 10 12 5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 20px center;background-size:12px;
+  padding-right:44px;cursor:pointer;
+}
+.cta-sel option{background:var(--green);color:var(--cream)}
 .cta-inp::placeholder{color:rgba(232,224,208,.28)}
-.cta-inp:focus{border-color:rgba(201,168,76,.65)}
+.cta-inp:focus,.cta-sel:focus{border-color:rgba(201,168,76,.65)}
 .cta-inp.err{border-color:rgba(201,106,106,.75)}
 .cta-sbm{
+  width:100%;
   background:rgba(201,168,76,0.92);
   color:var(--dark);
   font-family:'Inter',sans-serif;font-size:11px;font-weight:500;
   letter-spacing:.1em;text-transform:uppercase;
-  padding:15px 24px;border:none;cursor:pointer;flex-shrink:0;
-  border-radius:0 100px 100px 0;
+  padding:16px 24px;border:none;cursor:pointer;flex-shrink:0;
+  border-radius:100px;
   backdrop-filter:blur(8px);
   box-shadow:0 2px 16px rgba(201,168,76,0.2),inset 0 1px 0 rgba(255,255,255,0.15);
   transition:all .3s;white-space:nowrap;
   display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  margin-top:6px;
 }
 .cta-sbm:hover{background:var(--gold-l);box-shadow:0 8px 24px rgba(201,168,76,0.35)}
 .cta-sbm:disabled{opacity:.55;cursor:default;transform:none;box-shadow:0 2px 16px rgba(201,168,76,0.2),inset 0 1px 0 rgba(255,255,255,0.15)}
@@ -294,9 +302,6 @@ footer{background:var(--dark);border-top:1px solid rgba(201,168,76,.1);padding:7
   .rv-grid{grid-template-columns:1fr}
   .ft{grid-template-columns:1fr 1fr;gap:36px}
   .fb2{flex-direction:column;gap:8px;text-align:center}
-  .cta-form{flex-direction:column}
-  .cta-inp{border-right:1px solid rgba(201,168,76,.28);border-radius:100px}
-  .cta-sbm{border-radius:100px}
   footer{padding:56px 24px 32px}
 }
 @media(max-width:580px){
@@ -491,7 +496,18 @@ footer{background:var(--dark);border-top:1px solid rgba(201,168,76,.1);padding:7
     <h2 class="cta-h" data-reveal data-d="1">Начните с<br><em>бесплатной</em> консультации</h2>
     <p class="cta-sub" data-reveal data-d="2">Оставьте номер телефона — перезвоним в течение 15 минут и рассчитаем стоимость.</p>
     <form class="cta-form" id="leadForm" data-reveal data-d="3" novalidate>
+      <input class="cta-inp" id="leadName" name="name" type="text" placeholder="Ваше имя" autocomplete="name" required>
       <input class="cta-inp" id="leadPhone" name="phone" type="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel" required>
+      <select class="cta-sel" id="leadService" name="service">
+        <option value="">Тип услуги (необязательно)</option>
+        <option value="Уборка квартир">Уборка квартир</option>
+        <option value="Офисы и бизнес">Офисы и бизнес</option>
+        <option value="После ремонта">После ремонта</option>
+        <option value="Химчистка мебели">Химчистка мебели</option>
+        <option value="Поддерживающая уборка">Поддерживающая уборка</option>
+        <option value="Коттеджи и виллы">Коттеджи и виллы</option>
+        <option value="Другое">Другое</option>
+      </select>
       <button class="cta-sbm" id="leadSubmit" type="submit">
         <span class="cta-spin"></span><span class="cta-txt">Перезвоните мне</span>
       </button>
@@ -575,15 +591,17 @@ if(window.matchMedia('(hover:hover)').matches){
       первым письмом formsubmit.co попросит подтвердить адрес
       (придёт одно письмо с кнопкой подтверждения — нажать один раз).
    ============================================================ */
-var TELEGRAM_BOT_TOKEN = '8752940652:AAG4Ci9GJJJ7aEb89nc6nYG2Vo5KVizTsIw';
-var TELEGRAM_CHAT_ID   = '6337391749';
-var BACKUP_EMAIL       = 'ruslanbd2308@mail.ru';
+var TELEGRAM_BOT_TOKEN = 'ВСТАВЬ_СЮДА_ТОКЕН_БОТА';
+var TELEGRAM_CHAT_ID   = 'ВСТАВЬ_СЮДА_CHAT_ID';
+var BACKUP_EMAIL       = 'prive_clean.sochi@mail.ru';
 
 (function(){
-  var form   = document.getElementById('leadForm');
-  var input  = document.getElementById('leadPhone');
-  var btn    = document.getElementById('leadSubmit');
-  var status = document.getElementById('leadStatus');
+  var form    = document.getElementById('leadForm');
+  var nameEl  = document.getElementById('leadName');
+  var phoneEl = document.getElementById('leadPhone');
+  var svcEl   = document.getElementById('leadService');
+  var btn     = document.getElementById('leadSubmit');
+  var status  = document.getElementById('leadStatus');
 
   function setStatus(text, kind){
     status.textContent = text;
@@ -596,13 +614,17 @@ var BACKUP_EMAIL       = 'ruslanbd2308@mail.ru';
     return digits.length >= 10;
   }
 
-  function sendToTelegram(phone){
+  function sendToTelegram(data){
     if(!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.indexOf('ВСТАВЬ') !== -1) {
       return Promise.reject(new Error('bot token not set'));
     }
-    var text = 'Новая заявка с сайта priveclean.ru%0A' +
-               'Телефон: ' + encodeURIComponent(phone) + '%0A' +
-               'Страница: ' + encodeURIComponent(location.href);
+    var lines = [
+      'Новая заявка с сайта priveclean.ru',
+      'Имя: ' + data.name,
+      'Телефон: ' + data.phone,
+      'Услуга: ' + (data.service || 'не указана')
+    ];
+    var text = encodeURIComponent(lines.join('\n'));
     var url = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN +
               '/sendMessage?chat_id=' + encodeURIComponent(TELEGRAM_CHAT_ID) +
               '&text=' + text;
@@ -612,14 +634,16 @@ var BACKUP_EMAIL       = 'ruslanbd2308@mail.ru';
     });
   }
 
-  function sendToEmail(phone){
+  function sendToEmail(data){
     if(!BACKUP_EMAIL) return Promise.reject(new Error('no email configured'));
     return fetch('https://formsubmit.co/ajax/' + encodeURIComponent(BACKUP_EMAIL), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({
         _subject: 'Новая заявка с сайта Privé Clean',
-        phone: phone,
+        name: data.name,
+        phone: data.phone,
+        service: data.service || 'не указана',
         page: location.href
       })
     }).then(function(r){
@@ -630,21 +654,36 @@ var BACKUP_EMAIL       = 'ruslanbd2308@mail.ru';
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    var phone = input.value.trim();
+    var name  = nameEl.value.trim();
+    var phone = phoneEl.value.trim();
+    var svc   = svcEl.value;
 
+    var valid = true;
+    if(!name){
+      nameEl.classList.add('err');
+      valid = false;
+    } else {
+      nameEl.classList.remove('err');
+    }
     if(!isValidPhone(phone)){
-      input.classList.add('err');
-      setStatus('Проверьте номер телефона', 'bad');
-      input.focus();
+      phoneEl.classList.add('err');
+      valid = false;
+    } else {
+      phoneEl.classList.remove('err');
+    }
+    if(!valid){
+      setStatus('Заполните имя и корректный номер телефона', 'bad');
+      (name ? phoneEl : nameEl).focus();
       return;
     }
-    input.classList.remove('err');
+
+    var payload = { name: name, phone: phone, service: svc };
 
     btn.disabled = true;
     btn.classList.add('loading');
     setStatus('Отправляем заявку…');
 
-    Promise.allSettled([ sendToTelegram(phone), sendToEmail(phone) ]).then(function(results){
+    Promise.allSettled([ sendToTelegram(payload), sendToEmail(payload) ]).then(function(results){
       var ok = results.some(function(r){ return r.status === 'fulfilled'; });
       btn.disabled = false;
       btn.classList.remove('loading');
@@ -657,9 +696,8 @@ var BACKUP_EMAIL       = 'ruslanbd2308@mail.ru';
     });
   });
 
-  input.addEventListener('input', function(){
-    input.classList.remove('err');
-  });
+  nameEl.addEventListener('input', function(){ nameEl.classList.remove('err'); });
+  phoneEl.addEventListener('input', function(){ phoneEl.classList.remove('err'); });
 })();
 </script>
 </body>
