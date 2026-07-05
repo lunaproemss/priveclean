@@ -509,7 +509,7 @@ footer{background:var(--dark);border-top:1px solid rgba(201,168,76,.1);padding:7
         <option value="Другое">Другое</option>
       </select>
       <button class="cta-sbm" id="leadSubmit" type="submit">
-        <span class="cta-spin"></span><span class="cta-txt">Отправит заявку</span>
+        <span class="cta-spin"></span><span class="cta-txt">Отправить заявку</span>
       </button>
     </form>
     <p class="cta-status" id="leadStatus" role="status" aria-live="polite"></p>
@@ -548,7 +548,7 @@ footer{background:var(--dark);border-top:1px solid rgba(201,168,76,.1);padding:7
     </div>
   </div>
   <div class="fb2">
-    <span>© 2026 Privé Clean. Все права защищены.</span>
+    <span>© 2025 Privé Clean. Все права защищены.</span>
     <span>Сочи, Россия</span>
   </div>
 </footer>
@@ -577,23 +577,20 @@ if(window.matchMedia('(hover:hover)').matches){
 }
 
 /* ============================================================
-   ФОРМА ЗАЯВКИ — Telegram + резервная копия на почту
+   ФОРМА ЗАЯВКИ — Telegram (через безопасный прокси) + почта
    ============================================================
-   1) TELEGRAM_BOT_TOKEN — токен, который выдаёт @BotFather.
-      Формат примерно такой: 123456789:AAExxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   2) TELEGRAM_CHAT_ID — chat_id клиента. Узнаётся после того как
-      клиент один раз нажмёт /start вашему боту в Telegram —
-      тогда его chat_id появится по адресу:
-      https://api.telegram.org/bot<ТОКЕН>/getUpdates
-   3) BACKUP_EMAIL — почта для дублирования заявки (уже вписана,
-      можно поменять при необходимости). Письма идут через
-      formsubmit.co — бесплатный сервис без бэкенда, но перед
-      первым письмом formsubmit.co попросит подтвердить адрес
-      (придёт одно письмо с кнопкой подтверждения — нажать один раз).
+   1) LEAD_PROXY_URL — адрес твоего Cloudflare Worker'а, который
+      прячет токен бота и пересылает заявку в Telegram.
+      Пример: https://priveclean-lead-proxy.твой-ник.workers.dev
+      Сам токен бота и chat_id хранятся ТОЛЬКО в настройках
+      воркера (Settings -> Variables and Secrets), а не в этом
+      файле — так они не видны в исходном коде страницы.
+   2) BACKUP_EMAIL — почта для дублирования заявки, через
+      formsubmit.co (бесплатно, без бэкенда). Перед первым
+      письмом formsubmit.co попросит подтвердить адрес.
    ============================================================ */
-var TELEGRAM_BOT_TOKEN = 'ВСТАВЬ_СЮДА_ТОКЕН_БОТА';
-var TELEGRAM_CHAT_ID   = 'ВСТАВЬ_СЮДА_CHAT_ID';
-var BACKUP_EMAIL       = 'prive_clean.sochi@mail.ru';
+var LEAD_PROXY_URL = 'https://small-butterfly-1379.ruslanbdl08.workers.dev';
+var BACKUP_EMAIL    = 'prive_clean.sochi@mail.ru';
 
 (function(){
   var form    = document.getElementById('leadForm');
@@ -615,20 +612,14 @@ var BACKUP_EMAIL       = 'prive_clean.sochi@mail.ru';
   }
 
   function sendToTelegram(data){
-    if(!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.indexOf('ВСТАВЬ') !== -1) {
-      return Promise.reject(new Error('bot token not set'));
+    if(!LEAD_PROXY_URL || LEAD_PROXY_URL.indexOf('ВСТАВЬ') !== -1) {
+      return Promise.reject(new Error('proxy url not set'));
     }
-    var lines = [
-      'Новая заявка с сайта priveclean.ru',
-      'Имя: ' + data.name,
-      'Телефон: ' + data.phone,
-      'Услуга: ' + (data.service || 'не указана')
-    ];
-    var text = encodeURIComponent(lines.join('\n'));
-    var url = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN +
-              '/sendMessage?chat_id=' + encodeURIComponent(TELEGRAM_CHAT_ID) +
-              '&text=' + text;
-    return fetch(url).then(function(r){
+    return fetch(LEAD_PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function(r){
       if(!r.ok) throw new Error('telegram send failed');
       return r.json();
     });
